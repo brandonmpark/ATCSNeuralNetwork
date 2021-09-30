@@ -9,11 +9,11 @@ public class Perceptron
    public double[][][] W;
    public double[][] Theta = new double[2][];
 
-   public double[] a;
    public int inputNodes;
+   public double[] a;
 
-   public double[] h;
    public int hiddenNodes;
+   public double[] h;
 
    public double F;
 
