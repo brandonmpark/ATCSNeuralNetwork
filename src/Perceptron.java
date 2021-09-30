@@ -17,6 +17,36 @@ public class Perceptron
 
    public double F;
 
+   public double totalError;
+   public double[][][] deltaW;
+
+   public double omega0;
+   public double[] Omega;
+
+   public double psi0;
+   public double[] Psi;
+
+   /**
+    * Constructs a new Perceptron object and initializes the arrays.
+    * @param inputNodes the number of input nodes in the network.
+    * @param hiddenNodes the number of hidden nodes in the network.
+    */
+   public Perceptron(int inputNodes, int hiddenNodes)
+   {
+      this.inputNodes = inputNodes;
+      this.a = new double[inputNodes];
+
+      this.hiddenNodes = hiddenNodes;
+      this.h = new double[hiddenNodes];
+
+      Theta[0] = new double[hiddenNodes];
+      Theta[1] = new double[1];
+
+      Omega = new double[hiddenNodes];
+      Psi = new double[hiddenNodes];
+      deltaW = WeightsHandler.initWeightsArray(inputNodes, hiddenNodes);
+   }
+
    /**
     * Calculates the sigmoid of an input: 1/(1+e^-input)
     *
@@ -104,12 +134,6 @@ public class Perceptron
    public void train(int maxIterations, double lambda, double errorThreshold, double[][] trainInput, double[] trainOutput)
    {
       boolean done = false;
-
-      double totalError, omega, psi;
-      double[] Omega = new double[hiddenNodes];
-      double[] Psi = new double[hiddenNodes];
-      double[][][] deltaW = WeightsHandler.initWeightsArray(inputNodes, hiddenNodes);
-
       int iteration = 0;
 
       while (!done)
@@ -121,21 +145,22 @@ public class Perceptron
             a = trainInput[t];
             run();
 
-            omega = trainOutput[t] - F;
-            totalError += 0.5 * omega * omega;
-            psi = omega * fPrime(Theta[1][0]);
+            omega0 = trainOutput[t] - F;
+            totalError += 0.5 * omega0 * omega0;
+            psi0 = omega0 * fPrime(Theta[1][0]);
 
             for (int j = 0; j < hiddenNodes; j++)  // Calculates weight changes for hidden layer
             {
-               deltaW[1][j][0] = lambda * psi * h[j];
+               deltaW[1][j][0] = lambda * psi0 * h[j];
             }
 
-            for (int k = 0; k < inputNodes; k++)   // Calculates weight changes for input layer
+            for (int j = 0; j < hiddenNodes; j++)  // Calculates weight changes for input layer
             {
-               for (int j = 0; j < hiddenNodes; j++)
+               Omega[j] = psi0 * W[1][j][0];
+               Psi[j] = Omega[j] * fPrime(Theta[0][j]);
+
+               for (int k = 0; k < inputNodes; k++)
                {
-                  Omega[j] = psi * W[1][j][0];
-                  Psi[j] = Omega[j] * fPrime(Theta[0][j]);
                   deltaW[0][k][j] = lambda * Psi[j] * a[k];
                }
             }
@@ -145,11 +170,11 @@ public class Perceptron
                W[1][j][0] += deltaW[1][j][0];
             }
 
-            for (int i = 0; i < inputNodes; i++)   // Applies weight changes for input layer
+            for (int k = 0; k < inputNodes; k++)   // Applies weight changes for input layer
             {
                for (int j = 0; j < hiddenNodes; j++)
                {
-                  W[0][i][j] += deltaW[0][i][j];
+                  W[0][k][j] += deltaW[0][k][j];
                }
             }
          }  // (int t = 0; t < trainInput.length; t++;

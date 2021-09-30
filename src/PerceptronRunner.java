@@ -11,7 +11,7 @@ public class PerceptronRunner
    static String configFilePath;
    static Config config;
 
-   static Perceptron perceptron = new Perceptron();
+   static Perceptron perceptron;
 
    // Running related
    static boolean useWeightsFile;
@@ -38,14 +38,10 @@ public class PerceptronRunner
     */
    private static void autoConfigNetwork()
    {
-      perceptron.inputNodes = Integer.parseInt(config.get("inputNodes", "intPos"));    // Number of input nodes
-      perceptron.a = new double[perceptron.inputNodes];
+      int inputNodes = Integer.parseInt(config.get("inputNodes", "intPos"));    // Number of input nodes
+      int hiddenNodes = Integer.parseInt(config.get("hiddenNodes", "intPos"));  // Number of hidden nodes
 
-      perceptron.hiddenNodes = Integer.parseInt(config.get("hiddenNodes", "intPos"));  // Number of hidden nodes
-      perceptron.h = new double[perceptron.hiddenNodes];
-
-      perceptron.Theta[0] = new double[perceptron.hiddenNodes];
-      perceptron.Theta[1] = new double[1];
+      perceptron = new Perceptron(inputNodes, hiddenNodes);
    }
 
    /**
@@ -56,14 +52,10 @@ public class PerceptronRunner
       System.out.println();
       System.out.println("Reading configuration options.");
 
-      perceptron.inputNodes = Integer.parseInt(ConsoleHandler.input("Number of input nodes", "intPos"));    // Number of input nodes
-      perceptron.a = new double[perceptron.inputNodes];
+      int inputNodes = Integer.parseInt(ConsoleHandler.input("Number of input nodes", "intPos"));    // Number of input nodes
+      int hiddenNodes = Integer.parseInt(ConsoleHandler.input("Number of hidden nodes", "intPos"));  // Number of hidden nodes
 
-      perceptron.hiddenNodes = Integer.parseInt(ConsoleHandler.input("Number of hidden nodes", "intPos"));  // Number of hidden nodes
-      perceptron.h = new double[perceptron.hiddenNodes];
-
-      perceptron.Theta[0] = new double[perceptron.hiddenNodes];
-      perceptron.Theta[1] = new double[1];
+      perceptron = new Perceptron(inputNodes, hiddenNodes);
    }
 
    /**
