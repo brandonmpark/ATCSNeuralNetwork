@@ -7,7 +7,7 @@
 public class Perceptron
 {
    public double[][][] W;
-   public double[][] Theta = new double[2][];
+   public double[][] Theta = new double[3][];
 
    public int inputNodes;
    public double[] a;
@@ -39,8 +39,8 @@ public class Perceptron
       this.hiddenNodes = hiddenNodes;
       this.h = new double[hiddenNodes];
 
-      Theta[0] = new double[hiddenNodes];
-      Theta[1] = new double[1];
+      Theta[1] = new double[hiddenNodes];
+      Theta[2] = new double[1];
 
       Omega = new double[hiddenNodes];
       Psi = new double[hiddenNodes];
@@ -77,21 +77,21 @@ public class Perceptron
    {
       for (int j = 0; j < hiddenNodes; j++)  // Calculates hidden activations
       {
-         Theta[0][j] = 0;
+         Theta[1][j] = 0;
          for (int k = 0; k < inputNodes; k++)
          {
-            Theta[0][j] += W[0][k][j] * a[k];
+            Theta[1][j] += W[0][k][j] * a[k];
          }
-         h[j] = sigmoid(Theta[0][j]);
+         h[j] = sigmoid(Theta[1][j]);
       }
 
-      Theta[1][0] = 0;
+      Theta[2][0] = 0;
       for (int j = 0; j < hiddenNodes; j++)  // Calculates output activation
       {
-         Theta[1][0] += W[1][j][0] * h[j];
+         Theta[2][0] += W[1][j][0] * h[j];
       }
 
-      F = sigmoid(Theta[1][0]);
+      F = sigmoid(Theta[2][0]);
    }
 
    /**
@@ -147,7 +147,7 @@ public class Perceptron
 
             omega0 = trainOutput[t] - F;
             totalError += 0.5 * omega0 * omega0;
-            psi0 = omega0 * fPrime(Theta[1][0]);
+            psi0 = omega0 * fPrime(Theta[2][0]);
 
             for (int j = 0; j < hiddenNodes; j++)  // Calculates weight changes for hidden layer
             {
@@ -157,7 +157,7 @@ public class Perceptron
             for (int j = 0; j < hiddenNodes; j++)  // Calculates weight changes for input layer
             {
                Omega[j] = psi0 * W[1][j][0];
-               Psi[j] = Omega[j] * fPrime(Theta[0][j]);
+               Psi[j] = Omega[j] * fPrime(Theta[1][j]);
 
                for (int k = 0; k < inputNodes; k++)
                {
