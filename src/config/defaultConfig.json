@@ -1,0 +1,15 @@
+{
+  "inputNodes": 2,
+  "hiddenNodes": 2,
+
+  "useWeightsFile": false,
+  "useTestingFile": false,
+
+  "lambda": 0.1,
+  "maxIterations": 100000,
+  "errorThreshold": 0.1,
+  "minRandom": -1,
+  "maxRandom": 1.5,
+  "useTrainingFile": false,
+  "saveWeights": false
+}

@@ -1,0 +1,19 @@
+{
+  "inputNodes": 2,
+  "hiddenNodes": 2,
+
+  "useWeightsFile": true,
+  "weightsFilePath": "src/weights/and.txt",
+  "useTestingFile": true,
+  "testingFilePath": "src/testingSets/and.txt",
+
+  "lambda": 0.3,
+  "maxIterations": 100000,
+  "errorThreshold": 0.001,
+  "minRandom": 0.1,
+  "maxRandom": 1.5,
+  "useTrainingFile": true,
+  "trainingFilePath": "src/trainingSets/and.txt",
+  "saveWeights": true,
+  "savedWeightsFilePath": "src/weights/and.txt"
+}

@@ -1,0 +1,19 @@
+{
+  "inputNodes": 2,
+  "hiddenNodes": 5,
+
+  "useWeightsFile": true,
+  "weightsFilePath": "src/weights/xor.txt",
+  "useTestingFile": true,
+  "testingFilePath": "src/testingSets/xor.txt",
+
+  "lambda": 0.1,
+  "maxIterations": 1000000,
+  "errorThreshold": 0.001,
+  "minRandom": -1,
+  "maxRandom": 1.5,
+  "useTrainingFile": true,
+  "trainingFilePath": "src/trainingSets/xor.txt",
+  "saveWeights": true,
+  "savedWeightsFilePath": "src/weights/xor.txt"
+}
