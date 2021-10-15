@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
  * Validates Strings to ensure they are of a certain type and meet certain restrictions.
  *
  * @author Brandon Park
- * @version 9/27/21
+ * @version 10/15/21
  */
 public class Validator
 {
@@ -30,7 +30,7 @@ public class Validator
       }
 
       return isValid;
-   }
+   }  // public static boolean isValidInt(String s)
 
    /**
     * Determines whether a String is a valid integer greater than a given minimum (inclusive).
@@ -54,7 +54,7 @@ public class Validator
       }
 
       return isValid;
-   }
+   }  // public static boolean isValidInt(String s, int min)
 
    /**
     * Determines whether a String is a valid integer greater than a given minimum (inclusive) and lesser than a given maximum (exclusive).
@@ -79,7 +79,7 @@ public class Validator
       }
 
       return isValid;
-   }
+   }  // public static boolean isValidInt(String s, int min, int max)
 
    /**
     * Determines whether a String is a valid double.
@@ -102,7 +102,7 @@ public class Validator
       }
 
       return isValid;
-   }
+   }  // public static boolean isValidDouble(String s)
 
    /**
     * Determines whether a String is a valid double greater than a given minimum (inclusive).
@@ -126,7 +126,7 @@ public class Validator
       }
 
       return isValid;
-   }
+   }  // public static boolean isValidDouble(String s, double min)
 
    /**
     * Determines whether a String is a valid double greater than a given minimum (inclusive) and lesser than a given maximum (exclusive).
@@ -151,7 +151,7 @@ public class Validator
       }
 
       return isValid;
-   }
+   }  // public static boolean isValidDouble(String s, double min, double max)
 
    /**
     * Determines whether a String is a valid boolean.
@@ -174,7 +174,7 @@ public class Validator
       }
 
       return isValid;
-   }
+   }  // public static boolean isValidBoolean(String s)
 
    /**
     * Determines whether a String is a valid file path with a .json or .txt extension.
@@ -188,4 +188,4 @@ public class Validator
       Matcher matcher = pattern.matcher(s);
       return matcher.find();
    }
-}
+}  // public class Validator

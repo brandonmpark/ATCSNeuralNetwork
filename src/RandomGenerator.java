@@ -2,7 +2,7 @@
  * Generates random numbers.
  *
  * @author Brandon Park
- * @version 9/7/21
+ * @version 10/15/21
  */
 public class RandomGenerator
 {
@@ -18,4 +18,4 @@ public class RandomGenerator
       double difference = max - min;
       return difference * Math.random() + min;
    }
-}
+}  // public class RandomGenerator

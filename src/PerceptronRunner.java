@@ -4,7 +4,7 @@ import java.util.Scanner;
  * Configures and executes the perceptron process.
  *
  * @author Brandon Park
- * @version 9/15/21
+ * @version 10/15/21
  */
 public class PerceptronRunner
 {
@@ -12,6 +12,9 @@ public class PerceptronRunner
    static Config config;
 
    static Perceptron perceptron;
+
+   static double[][] inputSets;
+   static double[][] outputSets;
 
    // Running related
    static boolean useWeightsFile;
@@ -30,9 +33,6 @@ public class PerceptronRunner
    static boolean saveWeights;
    static String savedWeightsFilePath;
 
-   static double[][] inputSets;
-   static double[] outputSets;
-
    /**
     * Automatically configures the network using options from a configuration file.
     */
@@ -40,8 +40,9 @@ public class PerceptronRunner
    {
       int inputNodes = Integer.parseInt(config.get("inputNodes", "intPos"));    // Number of input nodes
       int hiddenNodes = Integer.parseInt(config.get("hiddenNodes", "intPos"));  // Number of hidden nodes
+      int outputNodes = Integer.parseInt(config.get("outputNodes", "intPos"));  // Number of output nodes
 
-      perceptron = new Perceptron(inputNodes, hiddenNodes);
+      perceptron = new Perceptron(inputNodes, hiddenNodes, outputNodes);
    }
 
    /**
@@ -54,8 +55,9 @@ public class PerceptronRunner
 
       int inputNodes = Integer.parseInt(ConsoleHandler.input("Number of input nodes", "intPos"));    // Number of input nodes
       int hiddenNodes = Integer.parseInt(ConsoleHandler.input("Number of hidden nodes", "intPos"));  // Number of hidden nodes
+      int outputNodes = Integer.parseInt(ConsoleHandler.input("Number of output nodes", "intPos"));  // Number of output nodes
 
-      perceptron = new Perceptron(inputNodes, hiddenNodes);
+      perceptron = new Perceptron(inputNodes, hiddenNodes, outputNodes);
    }
 
    /**
@@ -86,8 +88,8 @@ public class PerceptronRunner
 
          saveWeights = Boolean.parseBoolean(config.get("saveWeights", "boolean"));               // Save weights
          if (saveWeights) savedWeightsFilePath = config.get("savedWeightsFilePath", "filePath"); // Saved weights file path
-      }
-   }
+      }  // else if (operation.equals("train"))
+   }     // private static void autoConfig(String operation)
 
    /**
     * Manually configures the runtime options using options from the console inputted by the user.
@@ -117,9 +119,9 @@ public class PerceptronRunner
 
          saveWeights = Boolean.parseBoolean(ConsoleHandler.input("saveWeights", "boolean"));                // Save weights
          if (saveWeights)
-            savedWeightsFilePath = ConsoleHandler.input("savedWeightsFilePath", "filePath");  // Saved weights file path
-      }
-   }
+            savedWeightsFilePath = ConsoleHandler.input("savedWeightsFilePath", "filePath");                // Saved weights file path
+      }  // else if (operation.equals("train"))
+   }     // private static void manualConfig(String operation)
 
    /**
     * Runs the network on a testing set.
@@ -129,14 +131,12 @@ public class PerceptronRunner
       if (config != null) autoConfig("run");
       else manualConfig("run");
 
-      if (useWeightsFile) perceptron.W = WeightsHandler.readWeights(perceptron.inputNodes, perceptron.hiddenNodes, weightsFilePath);
-      else perceptron.W = WeightsHandler.inputWeights(perceptron.inputNodes, perceptron.hiddenNodes);
+      if (useWeightsFile)
+         perceptron.W = WeightsHandler.readWeights(perceptron.inputNodes, perceptron.hiddenNodes, perceptron.outputNodes, weightsFilePath);
+      else perceptron.W = WeightsHandler.inputWeights(perceptron.inputNodes, perceptron.hiddenNodes, perceptron.outputNodes);
 
       if (useTestingFile) inputSets = SetsHandler.readTestingSets(perceptron.inputNodes, testingFilePath);
       else inputSets = SetsHandler.inputTestingSets(perceptron.inputNodes);
-
-      System.out.println();
-      System.out.println("Outputting results from testing.");
 
       for (int t = 0; t < inputSets.length; t++)
       {
@@ -144,18 +144,20 @@ public class PerceptronRunner
          perceptron.run();
 
          System.out.println();
-         System.out.println("Testing Set #" + (t + 1) + ".");
-
          System.out.print("Inputs:");
-         for (int i = 0; i < perceptron.inputNodes; i++)
+         for (int k = 0; k < perceptron.inputNodes; k++)
          {
-            System.out.print(" " + perceptron.a[i]);
+            System.out.print(" " + perceptron.a[k]);
          }
+         System.out.print(", ");
 
-         System.out.println();
-         System.out.println("F: " + perceptron.F);
-      }
-   }
+         System.out.print("F:");
+         for (int i = 0; i < perceptron.outputNodes; i++)
+         {
+            System.out.print(" " + perceptron.F[i]);
+         }
+      }  // for (int t = 0; t < inputSets.length; t++)
+   }     // private static void runNetwork()
 
    /**
     * Trains the network on a training set.
@@ -169,20 +171,23 @@ public class PerceptronRunner
       System.out.println(" - Max iterations: " + maxIterations);
       System.out.println(" - Lambda: " + lambda);
 
-      if (useWeightsFile) perceptron.W = WeightsHandler.readWeights(perceptron.inputNodes, perceptron.hiddenNodes, weightsFilePath);
-      else perceptron.W = WeightsHandler.randomizeWeights(perceptron.inputNodes, perceptron.hiddenNodes, minRandom, maxRandom);
+      if (useWeightsFile)
+         perceptron.W = WeightsHandler.readWeights(perceptron.inputNodes, perceptron.hiddenNodes, perceptron.outputNodes, weightsFilePath);
+      else
+         perceptron.W = WeightsHandler.randomizeWeights(perceptron.inputNodes, perceptron.hiddenNodes, perceptron.outputNodes, minRandom, maxRandom);
 
       Object[] trainingSets;
-      if (useTrainingFile) trainingSets = SetsHandler.readTrainingSets(perceptron.inputNodes, trainingFilePath);
-      else trainingSets = SetsHandler.inputTrainingSets(perceptron.inputNodes);
+      if (useTrainingFile)
+         trainingSets = SetsHandler.readTrainingSets(perceptron.inputNodes, perceptron.outputNodes, trainingFilePath);
+      else trainingSets = SetsHandler.inputTrainingSets(perceptron.inputNodes, perceptron.outputNodes);
 
       inputSets = (double[][]) trainingSets[0];
-      outputSets = (double[]) trainingSets[1];
+      outputSets = (double[][]) trainingSets[1];
 
       perceptron.train(maxIterations, lambda, errorThreshold, inputSets, outputSets);
 
       if (saveWeights) WeightsHandler.writeWeights(perceptron.W, savedWeightsFilePath);
-   }
+   }  // private static void trainNetwork()
 
    /**
     * Executes the perceptron interface.
@@ -205,11 +210,12 @@ public class PerceptronRunner
       System.out.println("Network configuration");
       System.out.println(" - Number of input nodes: " + perceptron.inputNodes);
       System.out.println(" - Number of hidden nodes: " + perceptron.hiddenNodes);
+      System.out.println(" - Number of output nodes: " + perceptron.outputNodes);
 
       System.out.println();
       System.out.print("Run or train network? ");
       String option = scanner.nextLine();
       if (option.equals("run")) runNetwork();
       else if (option.equals("train")) trainNetwork();
-   }
-}
+   }  // public static void main(String[] args)
+}     // public class PerceptronRunner

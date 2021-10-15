@@ -1,10 +1,10 @@
 import java.util.Scanner;
 
 /**
- * Handles user inputs through the console.
+ * Reads and validates user inputs through the console.
  *
  * @author Brandon Park
- * @version 9/22/21
+ * @version 10/15/21
  */
 public class ConsoleHandler
 {
@@ -58,12 +58,9 @@ public class ConsoleHandler
             else System.out.println("   - " + label + " must be a valid boolean.");
          }
 
-         if (!failedInput)
-         {
-            returned = input;
-         }
-      }
+         if (!failedInput) returned = input;
+      }  // while (failedInput)
 
       return returned;
-   }
-}
+   }     // public static String input(String label, String type)
+}        // public class ConsoleHandler

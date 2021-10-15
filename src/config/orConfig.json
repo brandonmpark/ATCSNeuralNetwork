@@ -1,6 +1,7 @@
 {
   "inputNodes": 2,
   "hiddenNodes": 2,
+  "outputNodes": 1,
 
   "useWeightsFile": true,
   "weightsFilePath": "src/weights/or.txt",

@@ -2,7 +2,7 @@
 #### Brandon Park
 #### Dr. Nelson
 #### ATCS: Neural Networks (Period 3)
-#### September 28, 2021
+#### October 15, 2021
 
 # Usage Instructions
 ## Configuration
@@ -15,6 +15,7 @@ The first line of any training or testing file should contain the number of sets
 ### General Network Configuration
 - *inputNodes*: number of input nodes in the network (positive integer)
 - *hiddenNodes*: number of hidden nodes in the network (positive integer)
+- *outputNodes*: number of output nodes in the network (positive integer)
 ### Running
 - *useWeightsFile*: whether to use a weights file or not (boolean)
 - *weightsFilePath*: if useWeightsFile is true; file path of the weights file (file path)

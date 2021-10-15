@@ -1,0 +1,20 @@
+{
+  "inputNodes": 5,
+  "hiddenNodes": 5,
+  "outputNodes": 1,
+
+  "useWeightsFile": true,
+  "weightsFilePath": "src/weights/binary.txt",
+  "useTestingFile": true,
+  "testingFilePath": "src/testingSets/binary.txt",
+
+  "lambda": 1,
+  "maxIterations": 100000,
+  "errorThreshold": 0.001,
+  "minRandom": -1,
+  "maxRandom": 1.5,
+  "useTrainingFile": true,
+  "trainingFilePath": "src/trainingSets/binary.txt",
+  "saveWeights": true,
+  "savedWeightsFilePath": "src/weights/binary.txt"
+}

@@ -9,7 +9,7 @@ import java.io.IOException;
  * Reads and parses configuration values from a configuration file (JSON format).
  *
  * @author Brandon Park
- * @version 9/9/21
+ * @version 10/15/21
  */
 public class Config
 {
@@ -18,8 +18,8 @@ public class Config
    private JSONObject config;
 
    /**
-    * Constructs a new Config object, parsing and storing both defaultConfig and config in JSONObjects.
-    * Quits if default config file is missing or malformed, uses default config if config is missing or malformed.
+    * Constructs a new Config object, parsing and storing both defaultConfig and config as JSONObjects.
+    * Quits if default config file is missing or malformed, uses default config if config file is missing or malformed.
     *
     * @param filePath the file path of the config file.
     */
@@ -46,7 +46,7 @@ public class Config
       try
       {
          FileReader fileReader = new FileReader(filePath);
-         System.out.println("Config file found -- loading configuration options.");
+         System.out.println("Configuration file found -- loading configuration options.");
          config = (JSONObject) parser.parse(fileReader);
          System.out.println("Configuration options successfully loaded.");
       }
@@ -60,7 +60,7 @@ public class Config
          System.out.println("Malformed configuration file -- using default file.");
          config = defaultConfig;
       }
-   }
+   }  // public Config(String filePath)
 
    /**
     * Retrieves the config value corresponding to a given key.
@@ -94,8 +94,8 @@ public class Config
             System.out.println(" - " + key + " must be a valid non-negative double -- using default value (" + defaultValue + ").");
             value = defaultValue;
          }
-      }
+      }  // if (config.containsKey(key))
 
       return value;
-   }
-}
+   }     // public String get(String key, String type)
+}        // public class Config
