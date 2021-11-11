@@ -3,18 +3,21 @@
   "hiddenNodes": 2,
   "outputNodes": 1,
 
-  "useWeightsFile": true,
-  "weightsFilePath": "src/weights/or.txt",
-  "useTestingFile": true,
-  "testingFilePath": "src/testingSets/or.txt",
+  "weightsPath": "src/weights/or.txt",
 
+  "useTestingWeights": true,
+  "useTestingSets": true,
+  "testingSetsPath": "src/testingSets/or.txt",
+
+  "useTrainingWeights": true,
+  "useTrainingSets": true,
+  "trainingSetsPath": "src/trainingSets/or.txt",
   "lambda": 0.3,
-  "maxIterations": 100000,
+  "maxIterations": 10000,
   "errorThreshold": 0.001,
   "minRandom": -1,
   "maxRandom": 1.5,
-  "useTrainingFile": true,
-  "trainingFilePath": "src/trainingSets/or.txt",
   "saveWeights": true,
-  "savedWeightsFilePath": "src/weights/or.txt"
+  "savedWeightsPath": "src/weights/or.txt",
+  "autosaveInterval": 0
 }

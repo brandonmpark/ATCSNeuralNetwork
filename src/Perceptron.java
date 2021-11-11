@@ -2,11 +2,11 @@
  * Models a one hidden layer perceptron algorithm with any number of input, hidden, and output nodes.
  *
  * @author Brandon Park
- * @version 10/15/21
+ * @version 11/9/21
  */
 public class Perceptron
 {
-   public double startTime, endTime;
+   public double startTime;
 
    public double[][][] W;
    public double[][] Theta = new double[3][];
@@ -21,9 +21,7 @@ public class Perceptron
    public double[] F;
 
    public double totalError;
-   public double[][][] deltaW;
 
-   public double[] omega;
    public double[] Omega;
 
    public double[] psi;
@@ -50,9 +48,6 @@ public class Perceptron
       Theta[1] = new double[hiddenNodes];
       Theta[2] = new double[outputNodes];
 
-      deltaW = WeightsHandler.initWeightsArray(inputNodes, hiddenNodes, outputNodes);
-
-      omega = new double[outputNodes];
       Omega = new double[hiddenNodes];
 
       psi = new double[outputNodes];
@@ -85,77 +80,134 @@ public class Perceptron
    /**
     * Runs the perceptron, propagating each activation result forward.
     */
-   public void run()
+   public void run(double[] inputSet)
    {
-      for (int j = 0; j < hiddenNodes; j++)  // Calculates hidden activations
-      {
-         Theta[1][j] = 0.0;
-         for (int k = 0; k < inputNodes; k++)
-         {
-            Theta[1][j] += W[0][k][j] * a[k];
-         }
-         h[j] = sigmoid(Theta[1][j]);
-      }
+      a = inputSet;
 
-      for (int i = 0; i < outputNodes; i++)  // Calculates output activations
+      for (int i = 0; i < outputNodes; i++)
       {
          Theta[2][i] = 0.0;
+
          for (int j = 0; j < hiddenNodes; j++)
          {
+            Theta[1][j] = 0.0;
+
+            for (int k = 0; k < inputNodes; k++)
+            {
+               Theta[1][j] += W[0][k][j] * a[k];
+            }
+
+            h[j] = sigmoid(Theta[1][j]);
             Theta[2][i] += W[1][j][i] * h[j];
          }
+
          F[i] = sigmoid(Theta[2][i]);
-      }
+      }  // for (int i = 0; i < outputNodes; i++)
    }  // public void run()
 
    /**
-    * Runs the perceptron on a set of inputs and compares the outputs with an output set.
+    * Runs the perceptron and outputs the results.
     *
-    * @param trainInput  the input values of the training set.
-    * @param trainOutput the output values of the training set.
+    * @param inputSet the input values of the testing set.
     */
-   public void runWithTrue(double[][] trainInput, double[][] trainOutput)
+   public void runWithOutput(double[] inputSet)
    {
-      for (int t = 0; t < trainOutput.length; t++)
+      run(inputSet);
+
+      System.out.println();
+      System.out.print("Inputs:");
+      for (int k = 0; k < inputNodes; k++)
       {
-         a = trainInput[t];
-         run();
+         System.out.print(" " + a[k]);
+      }
+      System.out.print(", ");
 
-         System.out.println();
-         System.out.print("Inputs:");
-         for (int k = 0; k < inputNodes; k++)
-         {
-            System.out.print(" " + a[k]);
-         }
-         System.out.print(", ");
-
-         System.out.print("T:");
-         for (int i = 0; i < outputNodes; i++)
-         {
-            System.out.print(" " + trainOutput[t][i]);
-         }
-         System.out.print(", ");
-
-         System.out.print("F:");
-         for (int i = 0; i < outputNodes; i++)
-         {
-            System.out.print(" " + F[i]);
-         }
-      }  // for (int t = 0; t < trainOutput.length; t++)
-   }     // public void runWithTrue(double[][] trainInput, double[][] trainOutput)
+      System.out.print("F:");
+      for (int i = 0; i < outputNodes; i++)
+      {
+         System.out.print(" " + F[i]);
+      }
+   }  // public void runWithOutput(double[] inputSet)
 
    /**
-    * Trains the perceptron, using the gradient descent algorithm to update the weights until one of the following conditions is met:
+    * Runs the perceptron and outputs both the results and expected values.
+    *
+    * @param inputSet  the input values of the testing set.
+    * @param outputSet the output values of the testing set.
+    */
+   public void runWithOutput(double[] inputSet, double[] outputSet)
+   {
+      run(inputSet);
+
+      System.out.println();
+      System.out.print("Inputs:");
+      for (int k = 0; k < inputNodes; k++)
+      {
+         System.out.print(" " + a[k]);
+      }
+      System.out.print(", ");
+
+      System.out.print("T:");
+      for (int i = 0; i < outputNodes; i++)
+      {
+         System.out.print(" " + outputSet[i]);
+      }
+      System.out.print(", ");
+
+      System.out.print("F:");
+      for (int i = 0; i < outputNodes; i++)
+      {
+         System.out.print(" " + F[i]);
+      }
+   }  // public void runWithOutput(double[] inputSet, double[] outputSet)
+
+   /**
+    * Runs the perceptron, propagating each activation result forward and storing values to be used in backpropagation.
+    *
+    * @param inputSet  the input values of the testing set.
+    * @param outputSet the output values of the testing set.
+    */
+   public void runDetailed(double[] inputSet, double[] outputSet)
+   {
+      a = inputSet;
+
+      for (int i = 0; i < outputNodes; i++)
+      {
+         Theta[2][i] = 0.0;
+
+         for (int j = 0; j < hiddenNodes; j++)
+         {
+            Theta[1][j] = 0.0;
+
+            for (int k = 0; k < inputNodes; k++)
+            {
+               Theta[1][j] += W[0][k][j] * a[k];
+            }
+
+            h[j] = sigmoid(Theta[1][j]);
+            Theta[2][i] += W[1][j][i] * h[j];
+         }
+
+         F[i] = sigmoid(Theta[2][i]);
+         totalError += 0.5 * (outputSet[i] - F[i]) * (outputSet[i] - F[i]);
+         psi[i] = (outputSet[i] - F[i]) * fPrime(Theta[2][i]);
+      }  // for (int i = 0; i < outputNodes; i++)
+   }  // public void runDetailed(double[] inputSet, double[] outputSet)
+
+   /**
+    * Trains the perceptron, using the gradient descent algorithm with backpropagation to update the weights until one of the following conditions is met:
     * 1. The max number of iterations is reached.
     * 2. The total error of the training sets is below the threshold.
     *
-    * @param maxIterations  the max number of training cycles.
-    * @param lambda         the learning rate applied to each weight change.
-    * @param errorThreshold the error threshold to be reached.
-    * @param trainInput     the input values of the training set.
-    * @param trainOutput    the output values of the training set.
+    * @param maxIterations    the max number of training cycles.
+    * @param lambda           the learning rate applied to each weight change.
+    * @param errorThreshold   the error threshold to be reached.
+    * @param trainInput       the input values of the training set.
+    * @param trainOutput      the output values of the training set.
+    * @param weightsFilePath  the file path where the weights are saved.
+    * @param autosaveInterval the number of training cycles before each autosave occurs.
     */
-   public void train(int maxIterations, double lambda, double errorThreshold, double[][] trainInput, double[][] trainOutput)
+   public void train(int maxIterations, double lambda, double errorThreshold, double[][] trainInput, double[][] trainOutput, String weightsFilePath, int autosaveInterval)
    {
       startTime = System.currentTimeMillis();
       boolean done = false;
@@ -167,54 +219,33 @@ public class Perceptron
 
          for (int t = 0; t < trainInput.length; t++)
          {
-            a = trainInput[t];
-            run();
+            runDetailed(trainInput[t], trainOutput[t]);
 
-            for (int i = 0; i < outputNodes; i++)  // Calculates weight changes for hidden layer
-            {
-               omega[i] = trainOutput[t][i] - F[i];
-               totalError += 0.5 * omega[i] * omega[i];
-               psi[i] = omega[i] * fPrime(Theta[2][i]);
-
-               for (int j = 0; j < hiddenNodes; j++)
-               {
-                  deltaW[1][j][i] = lambda * psi[i] * h[j];
-               }
-            }
-
-            for (int j = 0; j < hiddenNodes; j++)  // Calculates weight changes for input layer
+            for (int j = 0; j < hiddenNodes; j++)
             {
                Omega[j] = 0.0;
+
                for (int i = 0; i < outputNodes; i++)
                {
                   Omega[j] += psi[i] * W[1][j][i];
+                  W[1][j][i] += lambda * h[j] * psi[i];
                }
-               Psi[j] = Omega[j] * fPrime(Theta[1][j]);
 
+               Psi[j] = Omega[j] * fPrime(Theta[1][j]);
                for (int k = 0; k < inputNodes; k++)
                {
-                  deltaW[0][k][j] = lambda * Psi[j] * a[k];
+                  W[0][k][j] += lambda * a[k] * Psi[j];
                }
-            }  // for (int j = 0; j < hiddenNodes; j++)
-
-            for (int j = 0; j < hiddenNodes; j++)  // Applies weight changes for hidden layer
-            {
-               for (int i = 0; i < outputNodes; i++)
-               {
-                  W[1][j][i] += deltaW[1][j][i];
-               }
-            }
-
-            for (int k = 0; k < inputNodes; k++)   // Applies weight changes for input layer
-            {
-               for (int j = 0; j < hiddenNodes; j++)
-               {
-                  W[0][k][j] += deltaW[0][k][j];
-               }
-            }
+            } // for (int j = 0; j < hiddenNodes; j++)
          }  // for (int t = 0; t < trainInput.length; t++)
 
          iteration++;
+
+         if (autosaveInterval > 0 && iteration % autosaveInterval == 0)
+         {
+            System.out.println("Autosaving... (at " + iteration + " total iterations with autosave interval of " + autosaveInterval + ")");
+            WeightsHandler.writeWeights(W, weightsFilePath);
+         }
 
          if (iteration > maxIterations)
          {
@@ -222,6 +253,7 @@ public class Perceptron
             System.out.println("Max number of iterations reached (" + maxIterations + ").");
             done = true;
          }
+
          else if (totalError < errorThreshold)
          {
             System.out.println();
@@ -231,8 +263,11 @@ public class Perceptron
          }
       }     // while (!done)
 
-      endTime = System.currentTimeMillis();
-      System.out.println((endTime - startTime) + "ms elapsed.");
-      runWithTrue(trainInput, trainOutput);
-   }  // public void train(int maxIterations, double lambda, double errorThreshold, double[][] trainInput, double[][] trainOutput)
+      System.out.println((System.currentTimeMillis() - startTime) + "ms elapsed.");
+
+      for (int t = 0; t < trainInput.length; t++)
+      {
+         runWithOutput(trainInput[t], trainOutput[t]);
+      }
+   }  // public void train(int maxIterations, double lambda, double errorThreshold, double[][] trainInput, double[][] trainOutput, String weightsFilePath, int autosaveInterval)
 }     // public class Perceptron

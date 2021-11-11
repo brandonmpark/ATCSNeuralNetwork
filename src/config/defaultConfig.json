@@ -1,15 +1,23 @@
 {
   "inputNodes": 2,
-  "hiddenNodes": 2,
+  "hiddenNodes": 5,
+  "outputNodes": 1,
 
-  "useWeightsFile": false,
-  "useTestingFile": false,
+  "weightsPath": "src/weights/[]",
 
-  "lambda": 0.1,
-  "maxIterations": 100000,
-  "errorThreshold": 0.1,
+  "useTestingWeights": false,
+  "useTestingSets": false,
+  "testingSetsPath": "src/testingSets/[]",
+
+  "useTrainingWeights": false,
+  "useTrainingSets": false,
+  "trainingSetsPath": "src/trainingSets/[]",
+  "lambda": 0.3,
+  "maxIterations": 10000,
+  "errorThreshold": 0.001,
   "minRandom": -1,
   "maxRandom": 1.5,
-  "useTrainingFile": false,
-  "saveWeights": false
+  "saveWeights": false,
+  "savedWeightsPath": "src/weights/[]",
+  "autosaveInterval": 0
 }

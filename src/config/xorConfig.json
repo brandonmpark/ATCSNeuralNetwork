@@ -3,18 +3,21 @@
   "hiddenNodes": 5,
   "outputNodes": 1,
 
-  "useWeightsFile": true,
-  "weightsFilePath": "src/weights/xor.txt",
-  "useTestingFile": true,
-  "testingFilePath": "src/testingSets/xor.txt",
+  "weightsPath": "src/weights/xor.txt",
 
+  "useTestingWeights": true,
+  "useTestingSets": true,
+  "testingSetsPath": "src/testingSets/xor.txt",
+
+  "useTrainingWeights": false,
+  "useTrainingSets": true,
+  "trainingSetsPath": "src/trainingSets/xor.txt",
   "lambda": 0.1,
   "maxIterations": 1000000,
   "errorThreshold": 0.001,
   "minRandom": -1,
   "maxRandom": 1.5,
-  "useTrainingFile": true,
-  "trainingFilePath": "src/trainingSets/xor.txt",
   "saveWeights": true,
-  "savedWeightsFilePath": "src/weights/xor.txt"
+  "savedWeightsPath": "src/weights/xor.txt",
+  "autosaveInterval": 10000
 }

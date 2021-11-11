@@ -1,20 +1,23 @@
 {
   "inputNodes": 2,
-  "hiddenNodes": 3,
+  "hiddenNodes": 5,
   "outputNodes": 3,
 
-  "useWeightsFile": true,
-  "weightsFilePath": "src/weights/bool.txt",
-  "useTestingFile": true,
-  "testingFilePath": "src/testingSets/bool.txt",
+  "weightsPath": "src/weights/bool.txt",
 
+  "useTestingWeights": true,
+  "useTestingSets": true,
+  "testingSetsPath": "src/testingSets/bool.txt",
+
+  "useTrainingWeights": false,
+  "useTrainingSets": true,
+  "trainingSetsPath": "src/trainingSets/bool.txt",
   "lambda": 0.3,
-  "maxIterations": 1000000,
+  "maxIterations": 100000,
   "errorThreshold": 0.001,
-  "minRandom": 0.1,
+  "minRandom": -1,
   "maxRandom": 1.5,
-  "useTrainingFile": true,
-  "trainingFilePath": "src/trainingSets/bool.txt",
   "saveWeights": true,
-  "savedWeightsFilePath": "src/weights/bool.txt"
+  "savedWeightsPath": "src/weights/bool.txt",
+  "autosaveInterval": 0
 }
